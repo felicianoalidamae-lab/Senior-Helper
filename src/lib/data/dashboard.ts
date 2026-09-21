@@ -46,7 +46,12 @@ export async function getDashboardData(): Promise<DashboardData> {
 
   const [{ data: profiles }, { data: openEntries }, { data: approvedLeave }, { data: todayClosedEntries }] =
     await Promise.all([
-      supabase.from("profiles").select("id, full_name, position").eq("status", "active").order("full_name"),
+      supabase
+        .from("profiles")
+        .select("id, full_name, position")
+        .eq("status", "active")
+        .eq("role", "employee")
+        .order("full_name"),
       supabase.from("time_entries").select("*").is("clock_out", null),
       supabase
         .from("leave_requests")
