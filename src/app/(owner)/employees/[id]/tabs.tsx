@@ -4,10 +4,12 @@ import { useState } from "react";
 
 export function Tabs({
   tabs,
+  initialActive = 0,
 }: {
   tabs: { label: string; content: React.ReactNode }[];
+  initialActive?: number;
 }) {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(initialActive);
 
   return (
     <div>

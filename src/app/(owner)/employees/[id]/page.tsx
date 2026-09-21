@@ -9,9 +9,17 @@ import { AttendanceTab } from "./attendance-tab";
 import { LeaveTab } from "./leave-tab";
 import { Tabs } from "./tabs";
 
-export default async function EmployeeDetailPage({ params }: { params: { id: string } }) {
+export default async function EmployeeDetailPage({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const detail = await getEmployeeDetail(params.id);
   if (!detail) notFound();
+
+  const fixEntry = typeof searchParams.fixEntry === "string" ? searchParams.fixEntry : undefined;
 
   const settings = await getSettings();
   const toDate = new Date().toISOString().slice(0, 10);
@@ -40,13 +48,21 @@ export default async function EmployeeDetailPage({ params }: { params: { id: str
             { label: "Profile", content: <ProfileTab profile={detail.profile} rates={detail.rates} /> },
             {
               label: "Attendance history",
-              content: <AttendanceTab rows={attendance} timeZone={settings.timezone} />,
+              content: (
+                <AttendanceTab
+                  employeeId={params.id}
+                  rows={attendance}
+                  timeZone={settings.timezone}
+                  autoOpenEntryId={fixEntry}
+                />
+              ),
             },
             {
               label: "Leave",
               content: <LeaveTab requests={leaveRequests ?? []} workDays={settings.work_days} />,
             },
           ]}
+          initialActive={fixEntry ? 1 : 0}
         />
       </div>
     </div>

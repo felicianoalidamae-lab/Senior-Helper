@@ -43,3 +43,45 @@ export function addDays(dateStr: string, days: number): string {
   d.setUTCDate(d.getUTCDate() + days);
   return toDateStr(d);
 }
+
+/** `timeZone`'s UTC offset (ms, positive east of UTC) at the given instant. */
+function getTimeZoneOffsetMs(instant: Date, timeZone: string): number {
+  const dtf = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hourCycle: "h23",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  const parts: Record<string, string> = {};
+  for (const p of dtf.formatToParts(instant)) {
+    if (p.type !== "literal") parts[p.type] = p.value;
+  }
+  const asUTC = Date.UTC(
+    Number(parts.year),
+    Number(parts.month) - 1,
+    Number(parts.day),
+    Number(parts.hour),
+    Number(parts.minute),
+    Number(parts.second)
+  );
+  return asUTC - instant.getTime();
+}
+
+/**
+ * Converts a wall-clock date + time (as read on a clock in `timeZone`) to
+ * the UTC instant it represents. Used for the owner's manual time-entry
+ * form, where dates/times are entered in the business time zone.
+ */
+export function zonedTimeToUtc(dateStr: string, timeStr: string, timeZone: string): Date {
+  const localAsIfUTC = Date.parse(`${dateStr}T${timeStr}:00.000Z`);
+  let guess = localAsIfUTC;
+  for (let i = 0; i < 2; i++) {
+    const offset = getTimeZoneOffsetMs(new Date(guess), timeZone);
+    guess = localAsIfUTC - offset;
+  }
+  return new Date(guess);
+}
