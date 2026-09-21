@@ -1,8 +1,4 @@
-/** Converts a JS Date (UTC) day-of-week to the spec's 1=Mon…7=Sun convention. */
-export function isoWeekday(date: Date): number {
-  const day = date.getUTCDay();
-  return day === 0 ? 7 : day;
-}
+import { isoWeekday } from "@/lib/time";
 
 /** Counts how many dates in [startDate, endDate] (inclusive, YYYY-MM-DD) fall on a configured work day. */
 export function countWorkDays(startDate: string, endDate: string, workDays: number[]): number {
