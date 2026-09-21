@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  background-color: #f7f7fa;
+  color: #1a1d2b;
+}
+
+:focus-visible {
+  outline: 3px solid #1b3f94;
+  outline-offset: 2px;
+}
+
+.btn {
+  @apply inline-flex min-h-[48px] items-center justify-center rounded-lg px-4 py-2 font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-primary {
+  @apply btn bg-brand-blue text-white hover:bg-[#152f70];
+}
+
+.btn-secondary {
+  @apply btn bg-brand-purple text-white hover:bg-[#5e155f];
+}
+
+.btn-outline {
+  @apply btn border border-border bg-surface text-ink hover:bg-background;
+}
+
+.card {
+  @apply rounded-xl border border-border bg-surface p-4 shadow-sm;
+}
+
+.input {
+  @apply min-h-[48px] w-full rounded-lg border border-border bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-brand-blue;
+}
+
+.label {
+  @apply mb-1 block text-sm font-medium text-ink;
+}
+
+.chip {
+  @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium;
+}
