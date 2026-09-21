@@ -1,0 +1,8 @@
+export function ErrorText({ message }: { message: string | null }) {
+  if (!message) return null;
+  return (
+    <p role="alert" className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-status-declined">
+      {message}
+    </p>
+  );
+}
